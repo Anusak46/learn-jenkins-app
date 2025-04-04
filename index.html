@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <title>สุ่มเมนูอาหาร - Random Menu</title>
+  <style>
+    /* รีเซ็ตขนาด margin/padding พื้นฐาน */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: #f7f7f7;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    p.description {
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .result {
+      text-align: center;
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px dashed #ddd;
+      border-radius: 6px;
+      background: #fafafa;
+    }
+
+    .result h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #444;
+    }
+
+    .result p {
+      font-size: 1.2rem;
+      color: #222;
+    }
+
+    button {
+      display: inline-block;
+      margin: 0 auto;
+      padding: 12px 20px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      background: #007BFF;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>สุ่มเมนูอาหาร (Random Menu)</h1>
+    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มเมนูอาหาร</p>
+  </header>
+
+  <div class="container">
+    <div class="result">
+      <h2 id="menuMessage">—</h2>
+      <p id="menuItem">—</p>
+    </div>
+
+    <div style="text-align:center;">
+      <button onclick="getRandomMenu()">สุ่มเมนูอาหาร</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Deploy ด้วย Jenkins + Netlify</p>
+  </footer>
+
+  <script>
+    // ฟังก์ชันดึงข้อมูลสุ่มเมนูอาหารจาก Netlify Function
+    async function getRandomMenu() {
+      try {
+        const response = await fetch('/.netlify/functions/random-menu');
+        if (!response.ok) {
+          throw new Error('เกิดข้อผิดพลาดในการดึงข้อมูลเมนู');
+        }
+        const data = await response.json();
+        
+        // อัปเดตข้อความในหน้าเว็บ
+        document.getElementById('menuMessage').textContent = data.message;
+        document.getElementById('menuItem').textContent = data.menu;
+      } catch (err) {
+        document.getElementById('menuMessage').textContent = 'Error';
+        document.getElementById('menuItem').textContent = err.message;
+      }
+    }
+
+    // โหลดหน้าแล้วให้สุ่มเมนูครั้งแรกอัตโนมัติ
+    window.addEventListener('DOMContentLoaded', () => {
+      getRandomMenu();
+    });
+  </script>
+</body>
+</html>
