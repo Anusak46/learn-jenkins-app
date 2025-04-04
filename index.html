@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8" />
-  <title>สุ่มเมนูอาหาร - Random Menu</title>
+  <title>สุ่มสลากกินแบ่งรัฐบาล - Thai Lottery Generator</title>
   <style>
-    /* รีเซ็ตขนาด margin/padding พื้นฐาน */
     * {
       margin: 0;
       padding: 0;
@@ -12,8 +12,8 @@
     }
 
     body {
-      font-family: sans-serif;
-      background: #f7f7f7;
+      font-family: 'Kanit', sans-serif;
+      background: linear-gradient(135deg, #fdfcfb, #e2d1c3);
       color: #333;
       line-height: 1.6;
       padding: 20px;
@@ -25,8 +25,9 @@
     }
 
     h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
+      font-size: 2.2rem;
+      color: #b5838d;
+      margin-bottom: 5px;
     }
 
     p.description {
@@ -35,73 +36,77 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 500px;
       margin: 0 auto;
       background: #fff;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      padding: 30px 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
     .result {
       text-align: center;
-      margin: 20px 0;
+      margin: 25px 0;
       padding: 20px;
-      border: 2px dashed #ddd;
-      border-radius: 6px;
-      background: #fafafa;
+      border: 2px dashed #b5838d;
+      border-radius: 10px;
+      background: #fff0f6;
     }
 
     .result h2 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       margin-bottom: 10px;
-      color: #444;
+      color: #6a4c93;
     }
 
-    .result p {
-      font-size: 1.2rem;
-      color: #222;
+    .lottery-number {
+      font-size: 2.5rem;
+      letter-spacing: 10px;
+      color: #d63384;
+      font-weight: bold;
     }
 
     button {
       display: inline-block;
       margin: 0 auto;
-      padding: 12px 20px;
+      padding: 12px 25px;
       font-size: 1rem;
       border: none;
-      border-radius: 4px;
-      background: #007BFF;
+      border-radius: 6px;
+      background: #6a4c93;
       color: #fff;
       cursor: pointer;
+      transition: background 0.3s;
     }
 
     button:hover {
-      background: #0056b3;
+      background: #5a3d7c;
     }
 
     footer {
       text-align: center;
       margin-top: 40px;
       font-size: 0.9rem;
-      color: #888;
+      color: #aaa;
     }
   </style>
 </head>
+
 <body>
 
   <header>
-    <h1>สุ่มเมนูอาหาร (Random Menu)</h1>
-    <p class="description">กดปุ่มด้านล่าง เพื่อสุ่มเมนูอาหาร</p>
+    <h1>สุ่มสลากกินแบ่งรัฐบาล</h1>
+    <p class="description">กดปุ่มเพื่อสุ่มเลข 6 หลักแบบสุ่มเสี่ยงโชค</p>
   </header>
 
   <div class="container">
     <div class="result">
-      <h2 id="menuMessage">—</h2>
-      <p id="menuItem">—</p>
+      <h2>หมายเลขของคุณคือ</h2>
+      <p id="lotteryNumber" class="lottery-number">------</p>
     </div>
 
     <div style="text-align:center;">
-      <button onclick="getRandomMenu()">สุ่มเมนูอาหาร</button>
+      <button onclick="getRandomLottery()">🎲 สุ่มเลข</button>
     </div>
   </div>
 
@@ -110,28 +115,23 @@
   </footer>
 
   <script>
-    // ฟังก์ชันดึงข้อมูลสุ่มเมนูอาหารจาก Netlify Function
-    async function getRandomMenu() {
+    async function getRandomLottery() {
       try {
-        const response = await fetch('/.netlify/functions/random-menu');
+        const response = await fetch('/.netlify/functions/random-lottery');
+
         if (!response.ok) {
-          throw new Error('เกิดข้อผิดพลาดในการดึงข้อมูลเมนู');
+          throw new Error('ไม่สามารถดึงข้อมูลได้');
         }
         const data = await response.json();
-        
-        // อัปเดตข้อความในหน้าเว็บ
-        document.getElementById('menuMessage').textContent = data.message;
-        document.getElementById('menuItem').textContent = data.menu;
+        document.getElementById('lotteryNumber').textContent = data.lotteryNumber;
       } catch (err) {
-        document.getElementById('menuMessage').textContent = 'Error';
-        document.getElementById('menuItem').textContent = err.message;
+        document.getElementById('lotteryNumber').textContent = 'เกิดข้อผิดพลาด';
       }
     }
 
-    // โหลดหน้าแล้วให้สุ่มเมนูครั้งแรกอัตโนมัติ
-    window.addEventListener('DOMContentLoaded', () => {
-      getRandomMenu();
-    });
+    // โหลดแล้วสุ่มทันที
+    window.addEventListener('DOMContentLoaded', getRandomLottery);
   </script>
 </body>
+
 </html>
